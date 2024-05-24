@@ -9,18 +9,27 @@ HHOOK hKlgHook; // keylogger hook handle
 
 LRESULT CALLBACK crosshairKeyHook(int nCode, WPARAM wParam, LPARAM lParam) {
     static bool shiftModifier;
+    static bool controlModifier;
     if (nCode == HC_ACTION) {
         PKBDLLHOOKSTRUCT p = (PKBDLLHOOKSTRUCT) lParam;
         if (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN) {
             // std::cout << ">>>>>>>> KEY PRESSED: " << code << std::endl;
             if (p->vkCode == VK_LSHIFT || p->vkCode == VK_RSHIFT) {
                 shiftModifier = true;
+            } else if (p->vkCode == VK_LCONTROL || p->vkCode == VK_RCONTROL) {
+                controlModifier = true;
             }
             if (shiftModifier) {
                 if (p->vkCode == VK_OEM_PLUS) {
                     incrementType();
                 } else if (p->vkCode == VK_OEM_MINUS) {
                     decrementType();
+                }
+            } else if (controlModifier) {
+                if (p->vkCode == VK_OEM_PLUS) {
+                    incrementColor();
+                } else if (p->vkCode == VK_OEM_MINUS) {
+                    decrementColor();
                 }
             } else {
                 if (p->vkCode == VK_OEM_PLUS) {
@@ -32,6 +41,8 @@ LRESULT CALLBACK crosshairKeyHook(int nCode, WPARAM wParam, LPARAM lParam) {
         } else if (wParam == WM_KEYUP || wParam == WM_SYSKEYUP) {
             if (p->vkCode == VK_LSHIFT || p->vkCode == VK_RSHIFT) {
                 shiftModifier = false;
+            } else if (p->vkCode == VK_LCONTROL || p->vkCode == VK_RCONTROL) {
+                controlModifier = false;
             }
         }
     }	
