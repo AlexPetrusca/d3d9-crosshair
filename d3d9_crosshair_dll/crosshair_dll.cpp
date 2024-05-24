@@ -27,6 +27,7 @@
 #include "src/d3d9/dummy.h"
 #include "src/d3d9/hook.h"
 #include "src/keylogger.h"
+#include "src/config.h"
 
 #include <d3d9.h>
 #include <iostream>
@@ -36,10 +37,8 @@ void printLog(const char* message) {
 }
 
 BOOL existsD3D9() {
-    char exePath[MAX_PATH];
-    GetModuleFileNameA(nullptr, exePath, MAX_PATH);
-    char* exeName = strrchr(exePath, '\\') + 1;
-    *strrchr(exeName, '.') = '\0';
+    char exeName[MAX_PATH];
+    GetExeName(exeName);
     return strcmp(exeName, "d3d9_crosshair") != 0 && GetModuleHandleA("d3d9.dll") != nullptr;
 }
 

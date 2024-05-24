@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "crosshair.h"
+#include "config.h"
 
 #include <complex>
 
@@ -92,27 +93,49 @@ void DrawCrosshair() {
 
 void incrementType() {
     type = (type + 1) % NUM_TYPES;
+    SetIntConfig("type", type);
 }
 
 void decrementType() {
     type = (type + NUM_TYPES - 1) % NUM_TYPES;
+    SetIntConfig("type", type);
 }
 
 void incrementColor() {
     color = (color + 1) % NUM_COLORS;
+    SetIntConfig("color", color);
 }
 
 void decrementColor() {
     color = (color + NUM_COLORS - 1) % NUM_COLORS;
+    SetIntConfig("color", color);
 }
 
 void expandCrosshair() {
     size++;
+    SetIntConfig("size", size);
 }
 
 void shrinkCrosshair() {
     if (size > 0) {
         size--;
+    }
+    SetIntConfig("size", size);
+}
+
+void PullConfig() {
+    InitializeConfig();
+    int pullType = GetIntConfig("type");
+    if (pullType != -1) {
+        type = pullType;
+    }
+    int pullColor = GetIntConfig("color");
+    if (pullColor != -1) {
+        color = pullColor;
+    }
+    int pullSize = GetIntConfig("size");
+    if (pullSize != -1) {
+        size = pullSize;
     }
 }
 
@@ -120,6 +143,7 @@ void renderCrosshair(LPDIRECT3DDEVICE9 pDevice) {
     if (!bInit) {
         pD3DDevice = pDevice;
         pD3DDevice->GetViewport(&pViewport);
+        PullConfig();
         bInit = true;
     }
     DrawCrosshair();
