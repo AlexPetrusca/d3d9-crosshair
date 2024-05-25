@@ -24,7 +24,7 @@ HWND createWindow(HMODULE hModule) {
     RegisterClassEx(&wc);
 
     // Create the window
-    HWND hWnd = CreateWindowEx(
+    hWindow = CreateWindowEx(
         0, // Optional window styles
         CLASS_NAME, // Window class
         TEXT("WindowAP"), // Window text
@@ -36,12 +36,12 @@ HWND createWindow(HMODULE hModule) {
         nullptr // Additional application data
     );
 
-    if (hWnd == nullptr) {
+    if (hWindow == nullptr) {
         MessageBox(nullptr, TEXT("hWnd creation failed"), TEXT("hWnd creation failed"), MB_OK);
         return nullptr;
     }
-    ShowWindow(hWnd, SW_HIDE);
-    return hWnd;
+    ShowWindow(hWindow, SW_HIDE);
+    return hWindow;
 }
 
 LPDIRECT3DDEVICE9 createD3D9Device(HMODULE hModule) {
